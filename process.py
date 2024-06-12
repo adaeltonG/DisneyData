@@ -3,9 +3,12 @@ This module is responsible for processing the data.  It will largely contain fun
 perfrom necessary processes in order to provide the desired result in the desired format.
 It is likely that most sections will require functions to be placed in this module.
 """
+from visual import NumberOfReviews
+from visual import SingleBarChart
 import csv
+records = []
+headings = []
 def database(disneydata):
-    data = []
     with open(disneydata, 'r') as file:
         csv_reader = csv.reader(file)
         data = list(csv_reader)
@@ -16,6 +19,7 @@ def database(disneydata):
 
 disneydata = 'data/disneyland_reviews.csv'
 dataset = database(disneydata)
+
 
 def SubmenuA():
     print("\nPlease enter one of the following options:")
@@ -29,6 +33,8 @@ def SubmenuA():
      SubmenuAA()
     elif choiceA == 'B':
         SubmenuAB()
+    elif choiceA == 'C':
+        SubmenuAC()
      
 
 def SubmenuB():
@@ -36,7 +42,11 @@ def SubmenuB():
     parkinfoname = Constants.parkinfo
     for item in parkinfoname:
         print(item)
-    choiceB = input().upper()
+    choiceA = input().upper()
+    if choiceA == 'A':
+        NumberOfReviews()
+    elif choiceA == 'B':
+        SingleBarChart()
 
 def SubmenuAA():
     print("   [A] California")
@@ -52,18 +62,8 @@ def SubmenuAA():
         ReviewHongKong()
 
 def SubmenuAB():
-    menuparkname = Constants.menupark
-    for item in menuparkname:
-        print(item)
-        
-    choice = input("\nPlease enter one of the following options: ").strip().upper()
-    if choice == 'A':
-        ParkAndLocationC()
-    elif choice == 'B':
-        print()
-        
-            
-            
+    ParkAndLocationC()
+                   
     
 def ReviewCalifornia():
     for row in dataset:
@@ -80,11 +80,53 @@ def ReviewHongKong():
         if 'Disneyland_HongKong' in row[4]:
             print(row)
 
-    #=def ParkAndLocationC():
-    #for row in dataset:
-      #  if 'Disneyland_California' in row[4]:
-       #     print(row[3,4])
+def ParkAndLocationC():
+    with open(disneydata, 'r') as file:
+        csv_reader = csv.reader(file)
+        header = next(csv_reader)
+        rows = list(csv_reader)
+        data = list(csv_reader)
+        for line in csv_reader:
+            records.append(line)
+    RatingIndex = header.index('Rating')
+    reviewer_location_index = header.index('Reviewer_Location')
+    branch_index = header.index('Branch')
+    grouped_data = {}
+    for row in rows:
+        rating = int(row[RatingIndex])
+        ReviewerLocation = row[reviewer_location_index]
+        branch = row[branch_index]
+        key = (ReviewerLocation, branch)
+        grouped_data[key] = grouped_data.get(key, 0) + rating
+    grouped_data_list = [(location, branch, total_rating) for (location, branch), total_rating in grouped_data.items()]
+    grouped_data_list.sort(key=lambda x: x[2], reverse=True)
+    print("Reviewer_Location, Branch, Total_Rating")
+    for location, branch, total_rating in grouped_data_list:
+        print(f"{location}, {branch}, {total_rating}")     
             
+def SubmenuAC():
+    with open(disneydata, 'r') as file:
+        csv_reader = csv.reader(file)
+        header = next(csv_reader)
+        rows = list(csv_reader)
+        data = list(csv_reader)
+        for line in csv_reader:
+            records.append(line)
+    RatingIndex = header.index('Rating')
+    reviewer_location_index = header.index('Reviewer_Location')
+    year_index = header.index('Year_month')
+    grouped_data = {}
+    for row in rows:
+        rating = int(row[RatingIndex])
+        ReviewerLocation = row[reviewer_location_index]
+        year = row[year_index]
+        key = (ReviewerLocation, year)
+        grouped_data[key] = grouped_data.get(key, 0) + rating
+    grouped_data_list = [(location, year, total_rating) for (location, year), total_rating in grouped_data.items()]
+    grouped_data_list.sort(key=lambda x: x[2], reverse=True)
+    print("Reviewer_Location, year, Total_Rating")
+    for location, year, total_rating in grouped_data_list:
+        print(f"{location}, {year}, {total_rating}") 
             
             
 class Constants:
