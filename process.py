@@ -5,6 +5,10 @@ It is likely that most sections will require functions to be placed in this modu
 """
 from visual import NumberOfReviews
 from visual import SingleBarChart
+from visual import ReviewByMonthHongKong
+from visual import ReviewByMonthCalifornia
+from visual import ReviewByMonthParis
+from visual import MenuAD
 import csv
 records = []
 headings = []
@@ -35,7 +39,8 @@ def SubmenuA():
         SubmenuAB()
     elif choiceA == 'C':
         SubmenuAC()
-     
+    elif choiceA == 'D':
+        MenuAD()
 
 def SubmenuB():
     print("\nPlease enter one of the following options:")
@@ -47,6 +52,22 @@ def SubmenuB():
         NumberOfReviews()
     elif choiceA == 'B':
         SingleBarChart()
+    elif choiceA == 'D':
+        MonthMenu()
+    else:
+        input("Invalid choice. Please try again.").upper()
+
+def MonthMenu():
+    parkinfoname = Constants.menupark
+    for item in parkinfoname:
+        print(item)
+    choice = input().upper()
+    if choice == 'A':
+        ReviewByMonthCalifornia()
+    elif choice == 'B':
+        ReviewByMonthParis()
+    elif choice == 'C':
+        ReviewByMonthHongKong()
 
 def SubmenuAA():
     print("   [A] California")

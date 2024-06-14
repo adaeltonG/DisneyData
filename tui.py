@@ -10,6 +10,7 @@ Please note that you do not need to read the data file or perform any other such
 
 from process import SubmenuA
 from process import SubmenuB
+from visual import main_menu
 
 
 
@@ -17,6 +18,7 @@ def menu():
     print("Please enter the letter which corresponds with your desired menu choice:")
     print("   [A] View Data")
     print("   [B] Visualise Data")
+    print("   [C] Export Data")
     print("   [X] Exit")
     choice = input().upper()
     
@@ -27,7 +29,8 @@ def menu():
     elif choice == 'B':
         print("You have chosen option B - Visualize Data")
         SubmenuB()
-           
+    elif choice == 'C':
+         main_menu()  
     elif choice == 'X':
         print("Exiting program...")
        
